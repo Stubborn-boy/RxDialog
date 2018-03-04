@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RxDialog.iml" filepath="$PROJECT_DIR$/RxDialog.iml" />
+      <module fileurl="file://C:\Users\jack\Desktop\RxDialog\RxDialog.iml" filepath="C:\Users\jack\Desktop\RxDialog\RxDialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

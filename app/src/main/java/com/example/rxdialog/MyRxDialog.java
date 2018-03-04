@@ -13,10 +13,14 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
@@ -44,6 +48,8 @@ public class MyRxDialog {
     private String negativeText;
     private String neutralText;
     private Context context;
+    private View view;
+    private List<Integer> idList = new ArrayList<>();
 
     public MyRxDialog(Context mActivity){
         this.context = mActivity;
@@ -83,6 +89,11 @@ public class MyRxDialog {
         return this;
     }
 
+    public MyRxDialog clickView(int viewId){
+        idList.add(viewId);
+        return this;
+    }
+
     public Observable dialogToObservable(){
         return Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
@@ -105,6 +116,17 @@ public class MyRxDialog {
                         }
                     }
                 };
+                View.OnClickListener mviewListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        e.onNext(v.getId());
+                    }
+                };
+                if(view!=null){
+                   for(int id : idList){
+                       view.findViewById(id).setOnClickListener(mviewListener);
+                   }
+                }
                 builder.setPositiveButton(positiveText, onClickListener);
                 builder.setNegativeButton(negativeText, onClickListener);
                 builder.setNeutralButton(neutralText, onClickListener);
@@ -135,6 +157,17 @@ public class MyRxDialog {
                         }
                     }
                 };
+                View.OnClickListener mviewListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        e.onNext(v.getId());
+                    }
+                };
+                if(view!=null){
+                    for(int id : idList){
+                        view.findViewById(id).setOnClickListener(mviewListener);
+                    }
+                }
                 builder.setPositiveButton(positiveText, onClickListener);
                 builder.setNegativeButton(negativeText, onClickListener);
                 builder.setNeutralButton(neutralText, onClickListener);
@@ -379,8 +412,9 @@ public class MyRxDialog {
      * resource will be inflated, adding all top-level views to the screen.
      */
     public MyRxDialog setView(int layoutResId) {
-        builder.setView(layoutResId);
-        return this;
+        //builder.setView(layoutResId);
+        View view = LayoutInflater.from(context).inflate(layoutResId, null, false);
+        return setView(view);
     }
 
     /**
@@ -388,19 +422,7 @@ public class MyRxDialog {
      */
     public MyRxDialog setView(View view) {
         builder.setView(view);
-        return this;
-    }
-
-    /**
-     * Set a custom view to be the contents of the Dialog, specifying the
-     * spacing to appear around that view. If the supplied view is an
-     * instance of a {@link ListView} the light background will be used.
-     */
-    @RestrictTo(LIBRARY_GROUP)
-    @Deprecated
-    public MyRxDialog setView(View view, int viewSpacingLeft, int viewSpacingTop,
-                              int viewSpacingRight, int viewSpacingBottom) {
-        builder.setView(view, viewSpacingLeft, viewSpacingTop, viewSpacingRight, viewSpacingBottom);
+        this.view = view;
         return this;
     }
 
@@ -414,12 +436,4 @@ public class MyRxDialog {
         return this;
     }
 
-    /**
-     * @hide
-     */
-    @RestrictTo(LIBRARY_GROUP)
-    public MyRxDialog setRecycleOnMeasureEnabled(boolean enabled) {
-        builder.setRecycleOnMeasureEnabled(enabled);
-        return this;
-    }
 }

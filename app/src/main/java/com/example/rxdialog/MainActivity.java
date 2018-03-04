@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
                 new MyRxDialog(MainActivity.this)
                         .setTitle("title")
                         .setMessage("Message")
+                        .setView(R.layout.layout_dialog_view)
+                        .clickView(R.id.text)
                         .setPositiveText("确定")
                         .setNegativeText("取消")
                         .setNeutralText("中立")
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
                                         break;
                                     case MyRxDialog.NEUTRAL:
                                         Toast.makeText(MainActivity.this, "Neutral", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case R.id.text:
+                                        Toast.makeText(MainActivity.this, "点击了TextView", Toast.LENGTH_SHORT).show();
                                         break;
                                     default:
                                         Log.e("MyRxDialog", integer+"");
